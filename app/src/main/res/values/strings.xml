@@ -14,5 +14,10 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <!-- String related to main -->
+    <string name="btquery">查询</string>
     <string name="upload">上传</string>
+    <string name="btlogin">登陆</string>
+    <string name="bttakephoto">拍照</string>
+    <string name="tvhint">wei@client</string>
 </resources>
