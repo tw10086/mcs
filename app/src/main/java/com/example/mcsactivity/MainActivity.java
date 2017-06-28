@@ -28,8 +28,8 @@ import com.example.mcs.thread.UploadThread;
  */
 
 public class MainActivity extends AppCompatActivity {
-    public static final int TAKE_PHOTO = 1;
-    public static final int UPLOAD_PHOTO = 2;
+    //public static final int TAKE_PHOTO = 1;
+    //public static final int UPLOAD_PHOTO = 2;
     private Uri imageUri;
     private TextView tvInformation;
     private Handler mHandler=new Handler(){
@@ -49,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case Global.LOGIN:
                     tvInformation.append("登陆成功...\n");
+                    String str=msg.getData().getString("login").toString();
+                    tvInformation.append(str+"\n");
                     break;
                 case Global.LOGINFAILED:
                     tvInformation.append("登陆失败...\n");
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //// TODO: 2017/6/25 take_photo:Replace with your own logic
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-                startActivityForResult(intent, TAKE_PHOTO);
+                startActivityForResult(intent, Global.TAKEPHOTO);
             }
         });
         btUpload.setOnClickListener(new View.OnClickListener() {
@@ -106,14 +108,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,LoginActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,Global.LOGIN);
             }
         });
         btquery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(MainActivity.this,QueryResultActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,Global.QUERY);
             }
         });
     }
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
     private void openAlbum() {
         Intent intent = new Intent("android.intent.action.GET_CONTENT");
         intent.setType("image/*");
-        startActivityForResult(intent, UPLOAD_PHOTO);
+        startActivityForResult(intent, Global.UPLOADPHOTO);
     }
 
     @Override
@@ -140,12 +142,12 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case TAKE_PHOTO:
+            case Global.TAKEPHOTO:
                 if (resultCode == RESULT_OK) {
                     //// TODO: 2017/6/25  take_photo:Replace with your own logic
                 }
                 break;
-            case UPLOAD_PHOTO:
+            case Global.UPLOADPHOTO:
                 if (resultCode == RESULT_OK) {
                     if (Build.VERSION.SDK_INT >= 19) {
                         uploadImage(HandleImage.handleImageOnKitKat(this,data));
@@ -153,6 +155,19 @@ public class MainActivity extends AppCompatActivity {
                         uploadImage(HandleImage.handleImageBeforeKitKat(data));
                     }
                 }
+                break;
+            case Global.LOGIN:
+                if(resultCode==RESULT_OK){
+                    String str=data.getStringExtra("login");
+                    Bundle bundle=new Bundle();
+                    bundle.putString("login",str);
+                    Message message=new Message();
+                    message.what=Global.LOGIN;
+                    message.setData(bundle);
+                    mHandler.sendMessage(message);
+                }
+                break;
+            case Global.QUERY:
                 break;
             default:
                 break;

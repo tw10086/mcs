@@ -15,6 +15,8 @@ public class Global {
     public static final int TIMEOUT=7;
     public static final int UPLOAD=8;
     public static final int UPLOADFAILED=9;
+    public static final int TAKEPHOTO=10;
+    public static final int UPLOADPHOTO=11;
     public static final int BUFSIZE=1024;
     public static final String IPaddr="192.168.0.158";
     public static final int port=9191;
